@@ -1,10 +1,10 @@
 package main
 
 import (
+	"file/skate/server/index"
 	"github.com/labstack/echo"
 	"html/template"
 	"io"
-	"net/http"
 )
 
 // TemplateRenderer is a custom html/template renderer for Echo framework
@@ -30,16 +30,8 @@ func main() {
 	}
 	e.Renderer = renderer
 
-	a := []int{1, 2, 3}
 	// Named route "foobar"
-	e.GET("/something", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "template.html", map[string]interface{}{
-			"name":     "Dolly!222",
-			"document": "test______",
-			"test":     a,
-		})
-	}).Name = "foobar"
-
+	e.GET("/something", index.NewIndexServer().GetAllContest).Name = "foobar"
 	e.Logger.Fatal(e.Start(":8000"))
 
 }
