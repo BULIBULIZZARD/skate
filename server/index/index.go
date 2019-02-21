@@ -6,17 +6,17 @@ import (
 )
 
 type Index struct {
-
 }
 
-func NewIndexServer() *Index  {
+func NewIndexServer() *Index {
 	return new(Index)
 }
 
-
-func (x *Index)GetAllContest(c echo.Context) error {
-	return c.Render(http.StatusOK, "template.html", map[string]interface{}{
+func (x *Index) GetAllContest(c echo.Context) error {
+	a := []int{1, 2, 3}
+	return c.JSON(http.StatusOK, map[string]interface{}{
 		"name":     "Dolly!222",
 		"document": "test______",
+		"test":     a,
 	})
 }
