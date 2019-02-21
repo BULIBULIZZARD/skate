@@ -13,3 +13,7 @@ type SMatch struct {
 	Remark    string `json:"remark" xorm:"not null default '' VARCHAR(45)"`
 	ContestId int    `json:"contest_id" xorm:"not null INT(3)"`
 }
+
+func NewMatch() *SMatch {
+	return new(SMatch)
+}

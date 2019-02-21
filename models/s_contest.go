@@ -7,3 +7,11 @@ type SContest struct {
 	Type        string `json:"type" xorm:"not null default '' VARCHAR(45)"`
 	ContestTime string `json:"contest_time" xorm:"not null default '' VARCHAR(45)"`
 }
+
+func NewContest() *SContest {
+	return new(SContest)
+}
+
+func MoreContest() []*SContest {
+	return make([]*SContest, 0)
+}

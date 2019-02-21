@@ -1,6 +1,7 @@
 package main
 
 import (
+	"file/skate/config"
 	"file/skate/server/index"
 	"github.com/labstack/echo"
 	"html/template"
@@ -29,9 +30,6 @@ func main() {
 		templates: template.Must(template.ParseGlob("*.html")),
 	}
 	e.Renderer = renderer
-
-	// Named route "foobar"
-	e.GET("/something", index.NewIndexServer().GetAllContest).Name = "foobar"
+	e.GET(config.GetConfig().GetVersion()+"/index/getContest", index.NewIndexServer().GetAllContest)
 	e.Logger.Fatal(e.Start(":8000"))
-
 }

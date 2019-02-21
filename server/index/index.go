@@ -1,6 +1,8 @@
 package index
 
 import (
+	"file/skate/data"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo"
 	"net/http"
 )
@@ -12,11 +14,11 @@ func NewIndexServer() *Index {
 	return new(Index)
 }
 
+
+
 func (x *Index) GetAllContest(c echo.Context) error {
-	a := []int{1, 2, 3}
+	model := data.NewContestModel()
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"name":     "Dolly!222",
-		"document": "test______",
-		"test":     a,
+		"data": model.GetAllContest(),
 	})
 }

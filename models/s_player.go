@@ -5,3 +5,11 @@ type SPlayer struct {
 	PlayerName string `json:"player_name" xorm:"not null default '' unique(player_name) VARCHAR(45)"`
 	Organize   string `json:"organize" xorm:"not null default '' unique(player_name) VARCHAR(45)"`
 }
+
+func NewPlayer() *SPlayer {
+	return new(SPlayer)
+}
+
+func MorePlayer() []*SPlayer {
+	return make([]*SPlayer, 0)
+}

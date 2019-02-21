@@ -12,3 +12,7 @@ type SScore struct {
 	Remark    string `json:"remark" xorm:"not null default '' VARCHAR(45)"`
 	MatchId   int    `json:"match_id" xorm:"not null unique(name) INT(6)"`
 }
+
+func NewScore() *SScore {
+	return new(SScore)
+}
