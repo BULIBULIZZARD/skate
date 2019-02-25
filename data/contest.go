@@ -15,7 +15,7 @@ func NewContestModel() *ContestModel {
 func (m *ContestModel) GetAllContest() interface{} {
 	engine := sql.GetSqlEngine()
 	data := models.MoreContest()
-	err := engine.OrderBy("id desc").Find(&data)
+	err := engine.Asc("id").Find(&data)
 	if err != nil {
 		log.Print(err.Error())
 	}

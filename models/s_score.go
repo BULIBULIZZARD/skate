@@ -16,3 +16,7 @@ type SScore struct {
 func NewScore() *SScore {
 	return new(SScore)
 }
+
+func MoreScore() []*SScore {
+	return make([]*SScore, 0)
+}

@@ -1,5 +1,6 @@
 package config
 
+
 type database struct {
 	Driver  string
 	Address string
@@ -23,3 +24,5 @@ func (c *config) GetDatabase() database {
 func (c *config) GetVersion() string {
 	return "/v1"
 }
+
+

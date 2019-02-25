@@ -30,6 +30,9 @@ func main() {
 		templates: template.Must(template.ParseGlob("*.html")),
 	}
 	e.Renderer = renderer
-	e.GET(config.GetConfig().GetVersion()+"/index/getContest", index.NewIndexServer().GetAllContest)
+	e.GET(config.GetConfig().GetVersion()+"/index/getContest", index.NewIndexServer().GetIndexContest)
+	e.GET(config.GetConfig().GetVersion()+"/index/getContestMatch/:cid", index.NewIndexServer().GetContestMatch)
+	e.GET(config.GetConfig().GetVersion()+"/index/getMatchScore/:mid/:group", index.NewIndexServer().GetMatchScore)
+
 	e.Logger.Fatal(e.Start(":8000"))
 }

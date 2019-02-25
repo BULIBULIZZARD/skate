@@ -17,3 +17,6 @@ type SMatch struct {
 func NewMatch() *SMatch {
 	return new(SMatch)
 }
+func MoreMatch() []*SMatch {
+	return make([]*SMatch, 0)
+}
