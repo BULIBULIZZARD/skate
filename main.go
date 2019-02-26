@@ -2,37 +2,26 @@ package main
 
 import (
 	"file/skate/config"
+	"file/skate/server/Organize"
+	"file/skate/server/Player"
 	"file/skate/server/index"
 	"github.com/labstack/echo"
-	"html/template"
-	"io"
 )
-
-// TemplateRenderer is a custom html/template renderer for Echo framework
-type TemplateRenderer struct {
-	templates *template.Template
-}
-
-// Render renders a template document
-func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
-
-	// Add global methods if data is a map
-	if viewContext, isMap := data.(map[string]interface{}); isMap {
-		viewContext["reverse"] = c.Echo().Reverse
-	}
-
-	return t.templates.ExecuteTemplate(w, name, data)
-}
 
 func main() {
 	e := echo.New()
-	renderer := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("*.html")),
-	}
-	e.Renderer = renderer
+	//index page route
 	e.GET(config.GetConfig().GetVersion()+"/index/getContest", index.NewIndexServer().GetIndexContest)
 	e.GET(config.GetConfig().GetVersion()+"/index/getContestMatch/:cid", index.NewIndexServer().GetContestMatch)
 	e.GET(config.GetConfig().GetVersion()+"/index/getMatchScore/:mid/:group", index.NewIndexServer().GetMatchScore)
 
+	//player page route
+	e.GET(config.GetConfig().GetVersion()+"/index/getPlayerScore/:pid", player.NewPlayerServer().GetPlayerScore)
+	e.GET(config.GetConfig().GetVersion()+"/index/getPlayerBestScore/:pid", player.NewPlayerServer().GetPlayerBestScore)
+
+	//organize page route
+	e.GET(config.GetConfig().GetVersion()+"/index/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
+
+	//server listening port 8000
 	e.Logger.Fatal(e.Start(":8000"))
 }

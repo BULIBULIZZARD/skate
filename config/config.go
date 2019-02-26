@@ -1,5 +1,6 @@
 package config
 
+import "github.com/labstack/echo"
 
 type database struct {
 	Driver  string
@@ -25,4 +26,6 @@ func (c *config) GetVersion() string {
 	return "/v1"
 }
 
-
+func (c *config) SetAccessOriginUrl(contest echo.Context) {
+	contest.Response().Header().Set("Access-Control-Allow-Origin", "*")
+}
