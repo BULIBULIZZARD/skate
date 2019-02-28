@@ -28,4 +28,16 @@ func (c *config) GetVersion() string {
 
 func (c *config) SetAccessOriginUrl(contest echo.Context) {
 	contest.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	contest.Response().Header().Set("Access-Control-Allow-Credentials","true")
+}
+
+func (c *config) GetCacheTableName() string {
+	return "myCache"
+}
+
+func (c *config) GetSalt() string {
+	return "_skate_"
+}
+func (c *config) GetCachePre() string {
+	return "player"
 }

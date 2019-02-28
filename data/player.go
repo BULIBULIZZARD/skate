@@ -37,3 +37,13 @@ func (p *PlayerModel) GetBestScoreById(id string,mName string) *models.MatchScor
 	}
 	return data
 }
+
+func (p *PlayerModel) PlayerLoginCheck(username string,password string) (*models.SPlayer,bool)   {
+	engine := sql.GetSqlEngine()
+	player := models.NewPlayer()
+	flag,err:= engine.Where("username=? and password=?",username,password).Get(player)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	return player,flag
+}

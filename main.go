@@ -16,11 +16,12 @@ func main() {
 	e.GET(config.GetConfig().GetVersion()+"/index/getMatchScore/:mid/:group", index.NewIndexServer().GetMatchScore)
 
 	//player page route
-	e.GET(config.GetConfig().GetVersion()+"/index/getPlayerScore/:pid", player.NewPlayerServer().GetPlayerScore)
-	e.GET(config.GetConfig().GetVersion()+"/index/getPlayerBestScore/:pid", player.NewPlayerServer().GetPlayerBestScore)
+	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerScore/:pid", player.NewPlayerServer().GetPlayerScore)
+	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerBestScore/:pid", player.NewPlayerServer().GetPlayerBestScore)
+	e.POST(config.GetConfig().GetVersion()+"/player/login",player.NewPlayerServer().PlayerLogin)
 
 	//organize page route
-	e.GET(config.GetConfig().GetVersion()+"/index/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
+	e.GET(config.GetConfig().GetVersion()+"/player/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
 
 	//server listening port 8000
 	e.Logger.Fatal(e.Start(":8000"))
