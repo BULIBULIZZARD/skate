@@ -6,7 +6,11 @@ type SContest struct {
 	Station     string `json:"station" xorm:"not null default '' VARCHAR(45)"`
 	Type        string `json:"type" xorm:"not null default '' VARCHAR(45)"`
 	ContestTime string `json:"contest_time" xorm:"not null default '' VARCHAR(45)"`
+	CreateTime  string `json:"create_time" xorm:"not null default '' VARCHAR(45)"`
+	UpdateTime  string `json:"update_time" xorm:"not null default '' VARCHAR(45)"`
+	DeleteTime  string `json:"delete_time" xorm:"not null default '' VARCHAR(45)"`
 }
+
 
 func NewContest() *SContest {
 	return new(SContest)

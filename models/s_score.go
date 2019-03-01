@@ -11,6 +11,9 @@ type SScore struct {
 	TimeScore string `json:"time_score" xorm:"not null default '' VARCHAR(45)"`
 	Remark    string `json:"remark" xorm:"not null default '' VARCHAR(45)"`
 	MatchId   int    `json:"match_id" xorm:"not null unique(name) INT(6)"`
+	CreateTime string `json:"create_time" xorm:"not null default '' VARCHAR(45)"`
+	UpdateTime string `json:"update_time" xorm:"not null default '' VARCHAR(45)"`
+	DeleteTime string `json:"delete_time" xorm:"not null default '' VARCHAR(45)"`
 }
 
 func NewScore() *SScore {

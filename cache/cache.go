@@ -3,7 +3,6 @@ package cache
 import (
 	"file/skate/config"
 	"github.com/muesli/cache2go"
-	"log"
 	"time"
 )
 
@@ -17,9 +16,9 @@ func NewCache() *MyCache {
 
 func (c *MyCache) getCache2go() *cache2go.CacheTable {
 	cache := cache2go.Cache(config.GetConfig().GetCacheTableName())
-	cache.SetAddedItemCallback(func(entry *cache2go.CacheItem) {
-		log.Print("Added:  ", entry.Key(), "   ",entry.CreatedOn())
-	})
+	//cache.SetAddedItemCallback(func(entry *cache2go.CacheItem) {
+	//	//log.Print("Added:  ", entry.Key(), "   ",entry.CreatedOn())
+	//})
 	return cache
 }
 func (c *MyCache) SetCache(key string, value string) {
@@ -30,7 +29,7 @@ func (c *MyCache) GetCache(key string) interface{} {
 	cache :=c.getCache2go()
 	res, err := cache.Value(key)
 	if err!=nil{
-		log.Print("Error retrieving value from cache:", err)
+		return ""
 	}
 	return res.Data()
 }

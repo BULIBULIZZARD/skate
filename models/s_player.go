@@ -6,6 +6,9 @@ type SPlayer struct {
 	Organize   string `json:"organize" xorm:"not null default '' unique(player_name) VARCHAR(45)"`
 	Username   string `json:"username" xorm:"not null default '' VARCHAR(20)"`
 	Password   string `json:"password" xorm:"not null default '' VARCHAR(40)"`
+	CreateTime string `json:"create_time" xorm:"not null default '' VARCHAR(45)"`
+	UpdateTime string `json:"update_time" xorm:"not null default '' VARCHAR(45)"`
+	DeleteTime string `json:"delete_time" xorm:"not null default '' VARCHAR(45)"`
 }
 
 func NewPlayer() *SPlayer {

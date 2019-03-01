@@ -12,6 +12,9 @@ type SMatch struct {
 	Enter     string `json:"enter" xorm:"not null default '' VARCHAR(45)"`
 	Remark    string `json:"remark" xorm:"not null default '' VARCHAR(45)"`
 	ContestId int    `json:"contest_id" xorm:"not null INT(3)"`
+	CreateTime string `json:"create_time" xorm:"not null default '' VARCHAR(45)"`
+	UpdateTime string `json:"update_time" xorm:"not null default '' VARCHAR(45)"`
+	DeleteTime string `json:"delete_time" xorm:"not null default '' VARCHAR(45)"`
 }
 
 func NewMatch() *SMatch {
