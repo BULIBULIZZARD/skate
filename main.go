@@ -6,6 +6,7 @@ import (
 	"file/skate/server/Player"
 	"file/skate/server/index"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
@@ -23,6 +24,10 @@ func main() {
 	//organize page route
 	e.GET(config.GetConfig().GetVersion()+"/player/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
 
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 	//server listening port 8000
 	e.Logger.Fatal(e.Start(":8000"))
 }

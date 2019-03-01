@@ -29,14 +29,11 @@ func (p *Player) GetPlayerScore(c echo.Context) error {
 	pid := c.Param("pid")
 	player := data.NewPlayerModel().GetNameOrganizeById(pid)
 	score := data.NewScoreModel().GetScoreByPlayerAndOrganize(player.PlayerName, player.Organize)
-	config.GetConfig().SetAccessOriginUrl(c)
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data": score,
 	})
 }
 func (p *Player) GetPlayerBestScore(c echo.Context) error {
-	config.GetConfig().SetAccessOriginUrl(c)
-
 	if !p.checkToken(c) {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "fail",
@@ -63,7 +60,6 @@ func (p *Player) PlayerLogin(c echo.Context) error {
 	psw := c.FormValue("password")
 	model := data.NewPlayerModel()
 	playerData, flag := model.PlayerLoginCheck(username, tools.NewTools().Sha1(psw))
-	config.GetConfig().SetAccessOriginUrl(c)
 	if flag {
 		token := tools.NewTools().Sha1(config.GetConfig().GetSalt() +
 			fmt.Sprintf("%d", playerData.Id) +
