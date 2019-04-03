@@ -11,20 +11,20 @@ import (
 
 func main() {
 	e := echo.New()
-	//index page route
+	//index route
 	e.GET(config.GetConfig().GetVersion()+"/index/getContest", index.NewIndexServer().GetIndexContest)
 	e.GET(config.GetConfig().GetVersion()+"/index/getContestMatch/:cid", index.NewIndexServer().GetContestMatch)
 	e.GET(config.GetConfig().GetVersion()+"/index/getMatchScore/:mid/:group", index.NewIndexServer().GetMatchScore)
 
-	//player page route
+	//player route
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerScore/:pid", player.NewPlayerServer().GetPlayerScore)
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerBestScore/:pid", player.NewPlayerServer().GetPlayerBestScore)
 	e.POST(config.GetConfig().GetVersion()+"/player/login",player.NewPlayerServer().PlayerLogin)
 
-	//organize page route
+	//organize  route
 	e.GET(config.GetConfig().GetVersion()+"/player/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
+	//CORS middleware
 
-	//middleware
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
