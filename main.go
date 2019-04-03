@@ -24,10 +24,24 @@ func main() {
 	//organize page route
 	e.GET(config.GetConfig().GetVersion()+"/player/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
 
+	//middleware
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
+	//
+	//Error handler
+	//e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+	//	return func(c echo.Context) error {
+	//		// Extract the credentials from HTTP request header and perform a security
+	//		// check
+	//		// For invalid credentials
+	//		return echo.NewHTTPError(http.StatusInternalServerError)
+	//
+	//		// For valid credentials call next
+	//		// return next(c)
+	//	}
+	//})
 	//server listening port 8000
 	e.Logger.Fatal(e.Start(":8000"))
 }
