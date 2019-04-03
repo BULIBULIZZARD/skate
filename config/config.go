@@ -18,7 +18,7 @@ func GetConfig() *config {
 func (c *config) GetDatabase() database {
 	return database{
 		Driver:  `mysql`,
-		Address: `root:fushihao@/skate?charset=utf8`,
+		Address: `root:root@/skate?charset=utf8`,
 	}
 }
 
