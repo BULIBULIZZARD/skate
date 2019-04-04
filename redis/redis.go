@@ -26,7 +26,7 @@ func (r *Redis) SetValue(key string, value string,outTime string) error {
 	if err != nil {
 		return err
 	}
-	_, err = c.Do("Set", key, value, "EX", "100")
+	_, err = c.Do("Set", key, value, "EX", outTime)
 	if err != nil {
 		return err
 	}
