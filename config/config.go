@@ -7,6 +7,11 @@ type database struct {
 	Address string
 }
 
+type redis struct {
+	IP   string
+	Port string
+}
+
 type config struct {
 }
 
@@ -28,7 +33,7 @@ func (c *config) GetVersion() string {
 
 func (c *config) SetAccessOriginUrl(contest echo.Context) {
 	contest.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	contest.Response().Header().Set("Access-Control-Allow-Credentials","true")
+	contest.Response().Header().Set("Access-Control-Allow-Credentials", "true")
 }
 
 func (c *config) GetCacheTableName() string {
@@ -40,4 +45,11 @@ func (c *config) GetSalt() string {
 }
 func (c *config) GetCachePre() string {
 	return "player"
+}
+
+func (c *config) GetRedisConfig() redis {
+	return redis{
+		IP:   "47.95.194.217",
+		Port: "6379",
+	}
 }

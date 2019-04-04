@@ -1,10 +1,10 @@
 package player
 
 import (
-	"file/skate/cache"
 	"file/skate/config"
 	"file/skate/data"
 	"file/skate/models"
+	"file/skate/redis"
 	"file/skate/tools"
 	"fmt"
 	"github.com/labstack/echo"
@@ -64,9 +64,14 @@ func (p *Player) PlayerLogin(c echo.Context) error {
 		token := tools.NewTools().Sha1(config.GetConfig().GetSalt() +
 			fmt.Sprintf("%d", playerData.Id) +
 			fmt.Sprintf("%d", time.Now().Unix()))
-		cache.NewCache().SetCache(config.GetConfig().GetCachePre()+
+		err := redis.NewRedis().SetValue(config.GetConfig().GetCachePre()+
 			fmt.Sprintf("%d", playerData.Id),
-			tools.NewTools().Sha1(token+config.GetConfig().GetSalt()))
+			tools.NewTools().Sha1(token+config.GetConfig().GetSalt()), "259200")
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]interface{}{
+				"message": "redis服务错误 ",
+			})
+		}
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"flag":    flag,
 			"id":      playerData.Id,
@@ -88,15 +93,18 @@ func (p *Player) checkToken(c echo.Context) bool {
 	if id == "" || token == "" {
 		return false
 	}
-	cacheData := cache.NewCache().GetCache(config.GetConfig().GetCachePre() + id)
-	if cacheData=="" {
+	cacheData, err := redis.NewRedis().GetValue(config.GetConfig().GetCachePre() + id)
+	if err != nil {
+		return false
+	}
+	if cacheData == "" {
 		return false
 	}
 	return cacheData == tools.NewTools().Sha1(token+config.GetConfig().GetSalt())
 }
 
 func (p *Player) checkBestScore(m *models.MatchScore) interface{} {
-	if m.TimeScore == "" || m.TimeScore == "完成比赛" || m.TimeScore == "弃权" || m.TimeScore == "犯规" || m.TimeScore == "退赛" ||
+	if m.TimeScore == "00.00.00" || m.TimeScore == "" || m.TimeScore == "完成比赛" || m.TimeScore == "弃权" || m.TimeScore == "犯规" || m.TimeScore == "退赛" ||
 		m.TimeScore == "判进" || m.TimeScore == "伤病" || m.TimeScore == "黄牌" {
 		return "filter"
 	}
