@@ -45,6 +45,7 @@ func (p *PlayerModel) GetAllScoreByMatchAndPlayer(id string, mName string) []*mo
 		Where("s_score.player_id=? and s_match.match_name = ? and s_score.time_score <> ? and  s_score.time_score <> ?", id, mName, "00:00.000", "完成比赛").
 		Cols("s_group", "match_type", "time_score", "date", "match_id").
 		Asc(`match_time`).
+		Asc(`s_score.id`).
 		Find(&data)
 	if err != nil {
 		log.Print(err.Error())
