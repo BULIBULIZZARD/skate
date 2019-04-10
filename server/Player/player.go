@@ -27,7 +27,7 @@ func (p *Player) GetPlayerScore(c echo.Context) error {
 		})
 	}
 	pid := p.id
-	score := data.NewScoreModel().GetScoreByPlayerAndOrganize(pid)
+	score := data.NewScoreModel().GetScoreByPlayerId(pid)
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data": score,
 	})

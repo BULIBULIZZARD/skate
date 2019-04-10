@@ -22,13 +22,13 @@ func (m *ScoreModel) GetScoreByMatchAndGroup(mid string, group string) []*models
 	}
 	return data
 }
-func (m *ScoreModel) GetScoreByPlayerAndOrganize(id string) []*models.MatchScore {
+func (m *ScoreModel) GetScoreByPlayerId(id string) []*models.MatchScore {
 	engine := sql.GetSqlEngine()
 	data := models.MoreMatchScore()
 	err := engine.Table("s_score").
 		Join("INNER", "s_match", "s_score.match_id=s_match.id").
 		Where("s_score.player_id=? ", id).
-		Asc(`no`).
+		Asc(`id`).
 		Find(&data)
 	if err != nil {
 		log.Print(err.Error())
