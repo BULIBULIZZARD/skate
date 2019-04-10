@@ -17,8 +17,9 @@ func main() {
 	e.GET(config.GetConfig().GetVersion()+"/index/getMatchScore/:mid/:group", index.NewIndexServer().GetMatchScore)
 
 	//player route
-	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerScore/:pid", player.NewPlayerServer().GetPlayerScore)
-	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerBestScore/:pid", player.NewPlayerServer().GetPlayerBestScore)
+	e.GET(config.GetConfig().GetVersion()+"/player/getShowData", player.NewPlayerServer().GetScoreByName)
+	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerScore", player.NewPlayerServer().GetPlayerScore)
+	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerBestScore", player.NewPlayerServer().GetPlayerBestScore)
 	e.POST(config.GetConfig().GetVersion()+"/player/login",player.NewPlayerServer().PlayerLogin)
 
 	//organize  route
