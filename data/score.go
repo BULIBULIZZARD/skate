@@ -28,7 +28,7 @@ func (m *ScoreModel) GetScoreByPlayerId(id string) []*models.MatchScore {
 	err := engine.Table("s_score").
 		Join("INNER", "s_match", "s_score.match_id=s_match.id").
 		Where("s_score.player_id=? ", id).
-		Asc(`id`).
+		Asc(`s_score.id`).
 		Find(&data)
 	if err != nil {
 		log.Print(err.Error())
