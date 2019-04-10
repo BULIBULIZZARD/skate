@@ -138,7 +138,7 @@ func (p *Player) buildEcharsData(data []*models.MatchScore) interface{} {
 	var matchType []string
 	for _, m := range data {
 		count++
-		value = append(value, m.TimeScore)
+		value = append(value, "0000-00-00 00:"+m.TimeScore)
 		group = append(group, m.SGroup)
 		matchId = append(matchId, m.MatchId)
 		date = append(date, m.Date)
