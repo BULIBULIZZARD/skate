@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -139,7 +140,7 @@ func (p *Player) buildEcharsData(data []*models.MatchScore) interface{} {
 	for _, m := range data {
 		count++
 		value = append(value, "0000-00-00 00:"+m.TimeScore)
-		group = append(group, m.SGroup)
+		group = append(group, strings.Replace(strings.Replace(m.SGroup,"第","",1),"组","",1))
 		matchId = append(matchId, m.MatchId)
 		date = append(date, m.Date)
 		matchType = append(matchType, m.MatchType)
