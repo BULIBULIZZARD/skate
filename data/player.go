@@ -3,6 +3,7 @@ package data
 import (
 	"file/skate/models"
 	"file/skate/sql"
+	"file/skate/tools"
 	"log"
 )
 
@@ -61,4 +62,12 @@ func (p *PlayerModel) PlayerLoginCheck(username string, password string) (*model
 		log.Print(err.Error())
 	}
 	return player, flag
+}
+
+func (p *PlayerModel) PlayerChangePassword(id string, ordPass string, newPass string) bool {
+	engine := sql.GetSqlEngine()
+	player := models.NewPlayer()
+	player.Password = tools.NewTools().Sha1(newPass)
+	flag, _ := engine.Id(id).Where("password=?", tools.NewTools().Sha1(ordPass)).Update(player)
+	return flag == 1
 }

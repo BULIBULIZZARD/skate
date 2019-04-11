@@ -83,7 +83,7 @@ func (p *Player) PlayerLogin(c echo.Context) error {
 		token := tools.NewTools().Sha1(config.GetConfig().GetSalt() +
 			fmt.Sprintf("%d", playerData.Id) +
 			fmt.Sprintf("%d", time.Now().Unix()))
-		err := redis.NewRedis().SetValue(config.GetConfig().GetCachePre()+
+		err := redis.NewRedis().SetValue(config.GetConfig().GetPlayerPre()+
 			fmt.Sprintf("%d", playerData.Id),
 			tools.NewTools().Sha1(token+config.GetConfig().GetSalt()), "259200")
 		if err != nil {
@@ -106,13 +106,39 @@ func (p *Player) PlayerLogin(c echo.Context) error {
 	}
 }
 
+func (p *Player) ChangePassword(c echo.Context) error{
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	ordPass := c.FormValue("ord")
+	newPass := c.FormValue("new")
+	if newPass != c.FormValue("re"){
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "两次密码不一致",
+		})
+	}
+	if ordPass != newPass {
+		flag := data.NewPlayerModel().PlayerChangePassword(p.id,ordPass,newPass)
+		if !flag{
+			return c.JSON(http.StatusOK, map[string]interface{}{
+				"message": "密码错误",
+			})
+		}
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "修改成功",
+	})
+}
+
 func (p *Player) checkToken(c echo.Context) bool {
 	id := c.FormValue("id")
 	token := c.FormValue("token")
 	if id == "" || token == "" {
 		return false
 	}
-	cacheData, err := redis.NewRedis().GetValue(config.GetConfig().GetCachePre() + id)
+	cacheData, err := redis.NewRedis().GetValue(config.GetConfig().GetPlayerPre() + id)
 	if err != nil {
 		return false
 	}

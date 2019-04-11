@@ -21,11 +21,13 @@ func main() {
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerScore", player.NewPlayerServer().GetPlayerScore)
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerBestScore", player.NewPlayerServer().GetPlayerBestScore)
 	e.POST(config.GetConfig().GetVersion()+"/player/login",player.NewPlayerServer().PlayerLogin)
+	e.POST(config.GetConfig().GetVersion()+"/player/changePassword",player.NewPlayerServer().ChangePassword)
 
 	//organize  route
-	e.GET(config.GetConfig().GetVersion()+"/player/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
-	//CORS middleware
+	e.GET(config.GetConfig().GetVersion()+"/organize/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
+	e.POST(config.GetConfig().GetVersion()+"/organize/login", Organize.NewOrganizeServer().OrganizeLogin)
 
+	//CORS middleware
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},

@@ -23,7 +23,7 @@ func GetConfig() *config {
 func (c *config) GetDatabase() database {
 	return database{
 		Driver:  `mysql`,
-		Address: `root:root@/skate?charset=utf8`,
+		Address: `root:root@(47.95.194.217:3306)/skate?charset=utf8`,
 	}
 }
 
@@ -43,10 +43,12 @@ func (c *config) GetCacheTableName() string {
 func (c *config) GetSalt() string {
 	return "_skate_"
 }
-func (c *config) GetCachePre() string {
+func (c *config) GetPlayerPre() string {
 	return "player"
 }
-
+func (c *config) GetOrganizePre() string {
+	return "organize"
+}
 func (c *config) GetRedisConfig() redis {
 	return redis{
 		IP:   "47.95.194.217",

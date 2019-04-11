@@ -35,3 +35,12 @@ func (o *OrganizeModel) GetAllPlayerById(oid string) []*models.SPlayer {
 	}
 	return player
 }
+func (o *OrganizeModel) CheckOrganizeLogin(username string, password string) (*models.SOrganize, bool) {
+	engine := sql.GetSqlEngine()
+	organize := models.NewOrganize()
+	flag, err := engine.Where("username=? and password=?", username, password).Get(organize)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	return organize, flag
+}
