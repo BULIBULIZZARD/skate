@@ -20,6 +20,11 @@ func (m *ScoreModel) GetScoreByMatchAndGroup(mid string, group string) []*models
 	if err != nil {
 		log.Print(err.Error())
 	}
+	for _, m := range data {
+		if m.No == "9" {
+			m.No = ""
+		}
+	}
 	return data
 }
 func (m *ScoreModel) GetScoreByPlayerId(id string) []*models.MatchScore {
