@@ -12,6 +12,7 @@ import (
 )
 
 type Organize struct {
+	id string
 }
 
 func NewOrganizeServer() *Organize {
@@ -19,14 +20,14 @@ func NewOrganizeServer() *Organize {
 }
 
 func (o *Organize) GetAllPlayer(c echo.Context) error {
-	oid := c.Param("oid")
+	oid := o.id
 	model := data.NewOrganizeModel()
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data": model.GetAllPlayerById(oid),
 	})
 }
 
-func (o *Organize)OrganizeLogin(c echo.Context)  error{
+func (o *Organize) OrganizeLogin(c echo.Context) error {
 	username := c.FormValue("username")
 	psw := c.FormValue("password")
 	model := data.NewOrganizeModel()
@@ -56,4 +57,21 @@ func (o *Organize)OrganizeLogin(c echo.Context)  error{
 			"message": "用户名或密码错误",
 		})
 	}
+}
+
+func (o *Organize) checkToken(c echo.Context) bool {
+	id := c.FormValue("id")
+	token := c.FormValue("token")
+	if id == "" || token == "" {
+		return false
+	}
+	cacheData, err := redis.NewRedis().GetValue(config.GetConfig().GetOrganizePre() + id)
+	if err != nil {
+		return false
+	}
+	if cacheData == "" {
+		return false
+	}
+	o.id = id
+	return cacheData == tools.NewTools().Sha1(token+config.GetConfig().GetSalt())
 }

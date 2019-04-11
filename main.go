@@ -24,7 +24,7 @@ func main() {
 	e.POST(config.GetConfig().GetVersion()+"/player/changePassword",player.NewPlayerServer().ChangePassword)
 
 	//organize  route
-	e.GET(config.GetConfig().GetVersion()+"/organize/getAllPlayer/:oid", Organize.NewOrganizeServer().GetAllPlayer)
+	e.GET(config.GetConfig().GetVersion()+"/organize/getAllPlayer", Organize.NewOrganizeServer().GetAllPlayer)
 	e.POST(config.GetConfig().GetVersion()+"/organize/login", Organize.NewOrganizeServer().OrganizeLogin)
 
 	//CORS middleware
