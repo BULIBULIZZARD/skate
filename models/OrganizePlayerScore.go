@@ -10,3 +10,7 @@ type OrganizePlayerScore struct {
 func MoreOrganizePlayerScore() []*OrganizePlayerScore {
 	return make([]*OrganizePlayerScore, 0)
 }
+
+func NewOrganizePlayerScore() *OrganizePlayerScore {
+	return new(OrganizePlayerScore)
+}

@@ -42,7 +42,21 @@ func (o *Organize) GetAllPlayerScore(c echo.Context) error {
 	})
 }
 
-
+func (o *Organize) GetOrganizeBestScore(c echo.Context) error {
+	if !o.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	model := data.NewOrganizeModel()
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"4圈":  model.GetBestMatchScore(o.id, "4圈"),
+		"7圈":     model.GetBestMatchScore(o.id, "7圈"),
+		"500米":   model.GetBestMatchScore(o.id, "500米"),
+		"1000米":  model.GetBestMatchScore(o.id, "1000米"),
+		"1500米":  model.GetBestMatchScore(o.id, "1500米"),
+	})
+}
 
 
 

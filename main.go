@@ -26,6 +26,7 @@ func main() {
 	//organize  route
 	e.GET(config.GetConfig().GetVersion()+"/organize/getAllPlayer", Organize.NewOrganizeServer().GetAllPlayer)
 	e.GET(config.GetConfig().GetVersion()+"/organize/getAllScore", Organize.NewOrganizeServer().GetAllPlayerScore)
+	e.GET(config.GetConfig().GetVersion()+"/organize/getBestScore", Organize.NewOrganizeServer().GetOrganizeBestScore)
 	e.POST(config.GetConfig().GetVersion()+"/organize/login", Organize.NewOrganizeServer().OrganizeLogin)
 
 	//CORS middleware
