@@ -15,25 +15,15 @@ func NewOrganizeModel() *OrganizeModel {
 
 func (o *OrganizeModel) GetAllPlayerById(oid string) []*models.SPlayer {
 	engine := sql.GetSqlEngine()
-	data := models.MoreOrganizePlayer()
-	err := engine.Table("s_organize").
-		Join("INNER", "s_player", "s_organize.organize_name=s_player.organize").
-		Where("s_organize.id=?", oid).
+	data := models.MorePlayer()
+	err := engine.Table("s_player").
+		Where("organize_id=?", oid).
+		Cols("id","player_name","gender","group_type").
 		Find(&data)
 	if err != nil {
 		log.Print(err.Error())
 	}
-	player := models.MorePlayer()
-
-	for _, v := range data {
-		p := models.SPlayer{
-			Id:         v.SPlayer.Id,
-			PlayerName: v.SPlayer.PlayerName,
-			Organize:   v.SPlayer.Organize,
-		}
-		player = append(player, &p)
-	}
-	return player
+	return data
 }
 func (o *OrganizeModel) CheckOrganizeLogin(username string, password string) (*models.SOrganize, bool) {
 	engine := sql.GetSqlEngine()
@@ -43,4 +33,21 @@ func (o *OrganizeModel) CheckOrganizeLogin(username string, password string) (*m
 		log.Print(err.Error())
 	}
 	return organize, flag
+}
+
+func (o *OrganizeModel)  GetAllPlayerScore(oid string) []*models.OrganizePlayerScore{
+	engine := sql.GetSqlEngine()
+	data:=models.MoreOrganizePlayerScore()
+	err := engine.Table("s_organize").
+		Join("INNER", "s_player", "s_organize.id=s_player.organize_id").
+		Join("INNER", "s_score","s_score.player_id=s_player.id").
+		Join("INNER", "s_match","s_score.match_id=s_match.id").
+		Cols("player_name","s_group","match_id","match_type","date","time_score","match_name","group_type","no").
+		Where("s_organize.id=?", oid).
+		Asc("s_score.id").
+		Find(&data)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	return data
 }

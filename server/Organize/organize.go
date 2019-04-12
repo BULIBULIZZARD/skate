@@ -20,12 +20,32 @@ func NewOrganizeServer() *Organize {
 }
 
 func (o *Organize) GetAllPlayer(c echo.Context) error {
-	oid := o.id
+	if !o.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
 	model := data.NewOrganizeModel()
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"data": model.GetAllPlayerById(oid),
+		"data": model.GetAllPlayerById(o.id),
 	})
 }
+
+func (o *Organize) GetAllPlayerScore(c echo.Context) error {
+	if !o.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data.NewOrganizeModel().GetAllPlayerScore(o.id),
+	})
+}
+
+
+
+
+
 
 func (o *Organize) OrganizeLogin(c echo.Context) error {
 	username := c.FormValue("username")
