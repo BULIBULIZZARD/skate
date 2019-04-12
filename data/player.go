@@ -54,6 +54,23 @@ func (p *PlayerModel) GetAllScoreByMatchAndPlayer(id string, mName string) []*mo
 	return data
 }
 
+func (p *PlayerModel) TreeData(id string) []*models.MatchScore {
+	engine := sql.GetSqlEngine()
+	data := models.MoreMatchScore()
+	err := engine.Table("s_score").
+		Join("INNER", "s_match", "s_score.match_id=s_match.id").
+		Where("s_score.player_id=?  and s_score.time_score <> ? and  s_score.time_score <> ?", id, "00:00.000", "完成比赛").
+		Cols("match_name", "time_score").
+		Asc(`match_time`).
+		Asc(`s_score.id`).
+		Find(&data)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	return data
+}
+
+
 func (p *PlayerModel) PlayerLoginCheck(username string, password string) (*models.SPlayer, bool) {
 	engine := sql.GetSqlEngine()
 	player := models.NewPlayer()

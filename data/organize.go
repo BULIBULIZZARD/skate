@@ -68,3 +68,16 @@ func (o *OrganizeModel) GetBestMatchScore(oid string, matchName string) *models.
 	}
 	return data
 }
+
+func (o *OrganizeModel) GetOrganizeNameById(oid string) *models.SOrganize {
+	engine := sql.GetSqlEngine()
+	data := models.NewOrganize()
+	_, err := engine.Table("s_organize").
+		Where("id=?", oid).
+		Cols("organize_name").
+		Get(data)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	return data
+}

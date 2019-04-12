@@ -50,16 +50,24 @@ func (o *Organize) GetOrganizeBestScore(c echo.Context) error {
 	}
 	model := data.NewOrganizeModel()
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"4圈":  model.GetBestMatchScore(o.id, "4圈"),
-		"7圈":     model.GetBestMatchScore(o.id, "7圈"),
-		"500米":   model.GetBestMatchScore(o.id, "500米"),
-		"1000米":  model.GetBestMatchScore(o.id, "1000米"),
-		"1500米":  model.GetBestMatchScore(o.id, "1500米"),
+		"4圈":    model.GetBestMatchScore(o.id, "4圈"),
+		"7圈":    model.GetBestMatchScore(o.id, "7圈"),
+		"500米":  model.GetBestMatchScore(o.id, "500米"),
+		"1000米": model.GetBestMatchScore(o.id, "1000米"),
+		"1500米": model.GetBestMatchScore(o.id, "1500米"),
 	})
 }
 
-
-
+func (o *Organize) GetTreeData(c echo.Context) error {
+	if !o.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"data": o.buildTreeData(),
+	})
+}
 
 func (o *Organize) OrganizeLogin(c echo.Context) error {
 	username := c.FormValue("username")
@@ -108,4 +116,34 @@ func (o *Organize) checkToken(c echo.Context) bool {
 	}
 	o.id = id
 	return cacheData == tools.NewTools().Sha1(token+config.GetConfig().GetSalt())
+}
+
+func (o *Organize) buildTreeData() map[string]interface{} {
+	model := data.NewOrganizeModel()
+	var tree [] map[string]interface{}
+	var boy [] map[string]interface{}
+	var girl [] map[string]interface{}
+	for _, v := range model.GetAllPlayerById(o.id) {
+		if v.Gender == "男子"{
+			boy = append(boy,map[string]interface{}{
+				"name":     v.PlayerName,
+			})
+		}else {
+			girl = append(girl,map[string]interface{}{
+				"name":     v.PlayerName,
+			})
+		}
+	}
+	tree = append(tree, map[string]interface{}{
+		"name":    "男",
+		"children": boy,
+	})
+	tree = append(tree, map[string]interface{}{
+		"name":    "女",
+		"children": girl,
+	})
+	return map[string]interface{}{
+		"name":     model.GetOrganizeNameById(o.id).OrganizeName,
+		"children": tree,
+	}
 }
