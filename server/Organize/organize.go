@@ -147,10 +147,12 @@ func (o *Organize) buildTreeData() map[string]interface{} {
 		if v.PlayerGender == "男子" {
 			boy = append(boy, map[string]interface{}{
 				"name": v.PlayerName,
+				"value":v.Id,
 			})
 		} else {
 			girl = append(girl, map[string]interface{}{
 				"name": v.PlayerName,
+				"value":v.Id,
 			})
 		}
 	}
