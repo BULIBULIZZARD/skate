@@ -42,10 +42,11 @@ func (o *OrganizeModel) GetAllPlayerScore(oid string) []*models.OrganizePlayerSc
 		Join("INNER", "s_player", "s_organize.id=s_player.organize_id").
 		Join("INNER", "s_score", "s_score.player_id=s_player.id").
 		Join("INNER", "s_match", "s_score.match_id=s_match.id").
-		Cols("player_name", "s_group", "match_id", "match_type", "date", "time_score", "match_name", "s_match.group_type", "no").
+		Cols("player_name", "s_group", "match_id", "match_type", "date", "time_score", "match_name", "s_match.group_type", "no","s_match.gender").
 		Where("s_organize.id=?", oid).
 		Asc("s_score.id").
 		Find(&data)
+	log.Printf("%v",data[0])
 	if err != nil {
 		log.Print(err.Error())
 	}

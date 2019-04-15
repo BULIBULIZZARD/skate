@@ -144,7 +144,7 @@ func (o *Organize) buildTreeData() map[string]interface{} {
 	var boy [] map[string]interface{}
 	var girl [] map[string]interface{}
 	for _, v := range model.GetAllPlayerById(o.id) {
-		if v.Gender == "男子" {
+		if v.PlayerGender == "男子" {
 			boy = append(boy, map[string]interface{}{
 				"name": v.PlayerName,
 			})
