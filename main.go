@@ -24,6 +24,7 @@ func main() {
 	e.POST(config.GetConfig().GetVersion()+"/player/changePassword",player.NewPlayerServer().ChangePassword)
 
 	//organize  route
+	e.GET(config.GetConfig().GetVersion()+"/organize/getPieData", Organize.NewOrganizeServer().GetPieData)
 	e.GET(config.GetConfig().GetVersion()+"/organize/getAllPlayer", Organize.NewOrganizeServer().GetAllPlayer)
 	e.GET(config.GetConfig().GetVersion()+"/organize/getAllScore", Organize.NewOrganizeServer().GetAllPlayerScore)
 	e.GET(config.GetConfig().GetVersion()+"/organize/getBestScore", Organize.NewOrganizeServer().GetOrganizeBestScore)

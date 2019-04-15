@@ -81,3 +81,18 @@ func (o *OrganizeModel) GetOrganizeNameById(oid string) *models.SOrganize {
 	}
 	return data
 }
+
+func (o *OrganizeModel) GetMatchCountById(oid string,matchName string) int {
+	engine := sql.GetSqlEngine()
+	data := models.NewOrganizePlayerScore()
+	count,err := engine.Table("s_organize").
+		Join("INNER", "s_player", "s_organize.id=s_player.organize_id").
+		Join("INNER", "s_score", "s_score.player_id=s_player.id").
+		Join("INNER", "s_match", "s_score.match_id=s_match.id").
+		Where("s_organize.id=? and s_match.match_name=?", oid,matchName).
+		Count(data)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	return int(count)
+}

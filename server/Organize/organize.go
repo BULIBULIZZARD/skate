@@ -69,6 +69,26 @@ func (o *Organize) GetTreeData(c echo.Context) error {
 	})
 }
 
+func (o *Organize) GetPieData(c echo.Context) error {
+	if !o.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	name := []string{"4圈","7圈","500米","1000米","1500米"}
+	count := []int{
+		data.NewOrganizeModel().GetMatchCountById(o.id, "4圈"),
+		data.NewOrganizeModel().GetMatchCountById(o.id, "7圈"),
+		data.NewOrganizeModel().GetMatchCountById(o.id, "500米"),
+		data.NewOrganizeModel().GetMatchCountById(o.id, "1000米"),
+		data.NewOrganizeModel().GetMatchCountById(o.id, "1500米"),
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"name": name,
+		"value":count,
+	})
+}
+
 func (o *Organize) OrganizeLogin(c echo.Context) error {
 	username := c.FormValue("username")
 	psw := c.FormValue("password")
@@ -124,22 +144,22 @@ func (o *Organize) buildTreeData() map[string]interface{} {
 	var boy [] map[string]interface{}
 	var girl [] map[string]interface{}
 	for _, v := range model.GetAllPlayerById(o.id) {
-		if v.Gender == "男子"{
-			boy = append(boy,map[string]interface{}{
-				"name":     v.PlayerName,
+		if v.Gender == "男子" {
+			boy = append(boy, map[string]interface{}{
+				"name": v.PlayerName,
 			})
-		}else {
-			girl = append(girl,map[string]interface{}{
-				"name":     v.PlayerName,
+		} else {
+			girl = append(girl, map[string]interface{}{
+				"name": v.PlayerName,
 			})
 		}
 	}
 	tree = append(tree, map[string]interface{}{
-		"name":    "男",
+		"name":     "男",
 		"children": boy,
 	})
 	tree = append(tree, map[string]interface{}{
-		"name":    "女",
+		"name":     "女",
 		"children": girl,
 	})
 	return map[string]interface{}{
