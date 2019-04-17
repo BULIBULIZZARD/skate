@@ -60,7 +60,7 @@ func (o *OrganizeModel) GetBestMatchScore(oid string, matchName string) *models.
 		Join("INNER", "s_score", "s_score.player_id=s_player.id").
 		Join("INNER", "s_match", "s_score.match_id=s_match.id").
 		Cols("player_name","gender", "s_group", "match_id", "match_type", "date", "time_score", "match_name", "s_match.group_type", "no").
-		Where("s_organize.id=? and s_match.match_name=? and s_score.time_score <> ? and s_score.time_score <> ?", oid, matchName, "00:00.000", "完成比赛").
+		Where("s_organize.id=? and s_match.match_name like ? and s_score.time_score <> ? and s_score.time_score <> ?", oid, matchName+"%", "00:00.000", "完成比赛").
 		Asc("s_score.time_score").
 		Get(data)
 	if err != nil {
@@ -89,7 +89,7 @@ func (o *OrganizeModel) GetMatchCountById(oid string,matchName string) int {
 		Join("INNER", "s_player", "s_organize.id=s_player.organize_id").
 		Join("INNER", "s_score", "s_score.player_id=s_player.id").
 		Join("INNER", "s_match", "s_score.match_id=s_match.id").
-		Where("s_organize.id=? and s_match.match_name=?", oid,matchName).
+		Where("s_organize.id=? and s_match.match_name like ?", oid,matchName+"%").
 		Count(data)
 	if err != nil {
 		log.Print(err.Error())
