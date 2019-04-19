@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -37,8 +38,14 @@ func (o *Organize) GetAllPlayerScore(c echo.Context) error {
 			"message": "fail",
 		})
 	}
+	page, _ := strconv.Atoi(c.FormValue("page"))
+	if page < 1 {
+		page = 1
+	}
+
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"data": data.NewOrganizeModel().GetAllPlayerScore(o.id),
+		"data":     data.NewOrganizeModel().GetAllPlayerScore(o.searchCond(c), page-1),
+		"page_num": data.NewOrganizeModel().GetAllPlayerScorePageNum(o.searchCond(c)),
 	})
 }
 
@@ -75,7 +82,7 @@ func (o *Organize) GetPieData(c echo.Context) error {
 			"message": "fail",
 		})
 	}
-	name := []string{"4圈","7圈","500米","1000米","1500米"}
+	name := []string{"4圈", "7圈", "500米", "1000米", "1500米"}
 	count := []int{
 		data.NewOrganizeModel().GetMatchCountById(o.id, "4圈"),
 		data.NewOrganizeModel().GetMatchCountById(o.id, "7圈"),
@@ -84,8 +91,8 @@ func (o *Organize) GetPieData(c echo.Context) error {
 		data.NewOrganizeModel().GetMatchCountById(o.id, "1500米"),
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"name": name,
-		"value":count,
+		"name":  name,
+		"value": count,
 	})
 }
 
@@ -138,6 +145,20 @@ func (o *Organize) checkToken(c echo.Context) bool {
 	return cacheData == tools.NewTools().Sha1(token+config.GetConfig().GetSalt())
 }
 
+func (o *Organize) searchCond(c echo.Context) string {
+	where := " s_organize.id = " + o.id
+	playerId := c.FormValue("player_id")
+	matchName := c.FormValue("match_name")
+
+	if playerId != "" {
+		where += "  and s_score.player_id=" + playerId
+	}
+	if matchName != "" {
+		where += " and s_match.match_name like '" + matchName + "%'"
+	}
+	return where
+}
+
 func (o *Organize) buildTreeData() map[string]interface{} {
 	model := data.NewOrganizeModel()
 	var tree [] map[string]interface{}
@@ -146,13 +167,13 @@ func (o *Organize) buildTreeData() map[string]interface{} {
 	for _, v := range model.GetAllPlayerById(o.id) {
 		if v.PlayerGender == "男子" {
 			boy = append(boy, map[string]interface{}{
-				"name": v.PlayerName,
-				"value":v.Id,
+				"name":  v.PlayerName,
+				"value": v.Id,
 			})
 		} else {
 			girl = append(girl, map[string]interface{}{
-				"name": v.PlayerName,
-				"value":v.Id,
+				"name":  v.PlayerName,
+				"value": v.Id,
 			})
 		}
 	}

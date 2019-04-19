@@ -55,3 +55,7 @@ func (c *config) GetRedisConfig() redis {
 		Port: "6379",
 	}
 }
+
+func (c *config) GetPageSize() int {
+	return 15
+}

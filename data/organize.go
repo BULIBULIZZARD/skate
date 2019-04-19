@@ -1,6 +1,7 @@
 package data
 
 import (
+	"file/skate/config"
 	"file/skate/models"
 	"file/skate/sql"
 	"log"
@@ -18,7 +19,7 @@ func (o *OrganizeModel) GetAllPlayerById(oid string) []*models.SPlayer {
 	data := models.MorePlayer()
 	err := engine.Table("s_player").
 		Where("organize_id=?", oid).
-		Cols("id", "player_name", "player_gender",).
+		Cols("id", "player_name", "player_gender", ).
 		Find(&data)
 	if err != nil {
 		log.Print(err.Error())
@@ -35,21 +36,42 @@ func (o *OrganizeModel) CheckOrganizeLogin(username string, password string) (*m
 	return organize, flag
 }
 
-func (o *OrganizeModel) GetAllPlayerScore(oid string) []*models.OrganizePlayerScore {
+func (o *OrganizeModel) GetAllPlayerScore(cond string ,page int) []*models.OrganizePlayerScore {
 	engine := sql.GetSqlEngine()
 	data := models.MoreOrganizePlayerScore()
-	err := engine.Table("s_organize").
-		Join("INNER", "s_player", "s_organize.id=s_player.organize_id").
+	err := engine.Table("s_player").
+		Join("INNER", "s_organize", "s_organize.id=s_player.organize_id").
 		Join("INNER", "s_score", "s_score.player_id=s_player.id").
 		Join("INNER", "s_match", "s_score.match_id=s_match.id").
-		Cols("player_name", "s_group", "match_id", "match_type", "date", "time_score", "match_name", "s_match.group_type", "no","s_match.gender").
-		Where("s_organize.id=?", oid).
+		Cols("player_name", "s_score.player_id", "s_group", "match_id", "match_type", "date", "time_score", "match_name", "s_match.group_type", "no", "s_match.gender").
+		Where(cond).
 		Asc("s_score.id").
+		Limit(config.GetConfig().GetPageSize(), page*config.GetConfig().GetPageSize()).
 		Find(&data)
 	if err != nil {
 		log.Print(err.Error())
 	}
 	return data
+}
+
+func (o *OrganizeModel) GetAllPlayerScorePageNum(cond string) int {
+	engine := sql.GetSqlEngine()
+	data := models.NewOrganizePlayerScore()
+	pageNum, err := engine.Table("s_organize").
+		Join("INNER", "s_player", "s_organize.id=s_player.organize_id").
+		Join("INNER", "s_score", "s_score.player_id=s_player.id").
+		Join("INNER", "s_match", "s_score.match_id=s_match.id").
+		Cols("player_name", "s_group", "match_id", "match_type", "date", "time_score", "match_name", "s_match.group_type", "no", "s_match.gender").
+		Where(cond).
+		Asc("s_score.id").
+		Count(data)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	if int(pageNum)%config.GetConfig().GetPageSize() > 0 {
+		return int(pageNum) / config.GetConfig().GetPageSize()
+	}
+	return int(pageNum)/config.GetConfig().GetPageSize() + 1
 }
 
 func (o *OrganizeModel) GetBestMatchScore(oid string, matchName string) *models.OrganizePlayerScore {
@@ -59,7 +81,7 @@ func (o *OrganizeModel) GetBestMatchScore(oid string, matchName string) *models.
 		Join("INNER", "s_player", "s_organize.id=s_player.organize_id").
 		Join("INNER", "s_score", "s_score.player_id=s_player.id").
 		Join("INNER", "s_match", "s_score.match_id=s_match.id").
-		Cols("player_name","gender", "s_group", "match_id", "match_type", "date", "time_score", "match_name", "s_match.group_type", "no").
+		Cols("player_name", "gender", "s_group", "match_id", "match_type", "date", "time_score", "match_name", "s_match.group_type", "no").
 		Where("s_organize.id=? and s_match.match_name like ? and s_score.time_score <> ? and s_score.time_score <> ?", oid, matchName+"%", "00:00.000", "完成比赛").
 		Asc("s_score.time_score").
 		Get(data)
@@ -82,14 +104,14 @@ func (o *OrganizeModel) GetOrganizeNameById(oid string) *models.SOrganize {
 	return data
 }
 
-func (o *OrganizeModel) GetMatchCountById(oid string,matchName string) int {
+func (o *OrganizeModel) GetMatchCountById(oid string, matchName string) int {
 	engine := sql.GetSqlEngine()
 	data := models.NewOrganizePlayerScore()
-	count,err := engine.Table("s_organize").
+	count, err := engine.Table("s_organize").
 		Join("INNER", "s_player", "s_organize.id=s_player.organize_id").
 		Join("INNER", "s_score", "s_score.player_id=s_player.id").
 		Join("INNER", "s_match", "s_score.match_id=s_match.id").
-		Where("s_organize.id=? and s_match.match_name like ?", oid,matchName+"%").
+		Where("s_organize.id=? and s_match.match_name like ?", oid, matchName+"%").
 		Count(data)
 	if err != nil {
 		log.Print(err.Error())
