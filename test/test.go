@@ -30,6 +30,6 @@ func main() {
 		Msg:"221",
 		To:"2",
 	}
-	flag :=data.NewPlayerModel().SavePlayerChatLog(message)
+	flag :=data.NewPlayerModel().SavePlayerChatLog(message.Msg,message.From,message.To)
 	println(flag)
 }

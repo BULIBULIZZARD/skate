@@ -33,7 +33,6 @@ type Message struct {
 	Msg  string
 }
 
-
 func (client *Client) readMessage() {
 	defer func() {
 		err := client.socket.Close()
@@ -59,7 +58,7 @@ func (client *Client) readMessage() {
 			continue
 		}
 		if message.From != "" {
-			data.NewPlayerModel().SavePlayerChatLog(message)
+			data.NewPlayerModel().SavePlayerChatLog(message.Msg, message.From, message.To)
 		}
 		client.manager.message <- message
 	}

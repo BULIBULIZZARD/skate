@@ -4,7 +4,6 @@ import (
 	"file/skate/models"
 	"file/skate/sql"
 	"file/skate/tools"
-	"file/skate/websocket"
 	"log"
 	"strconv"
 	"time"
@@ -91,13 +90,13 @@ func (p *PlayerModel) PlayerChangePassword(id string, ordPass string, newPass st
 	return flag == 1
 }
 
-func (p *PlayerModel) SavePlayerChatLog(message websocket.Message) int  {
+func (p *PlayerModel) SavePlayerChatLog(msg string, from string, to string) int {
 	engine := sql.GetSqlEngine()
 	chat := models.NewChat()
 	var err error
-	chat.Message = message.Msg
-	chat.FormId, err = strconv.Atoi(message.From)
-	chat.ToId, err = strconv.Atoi(message.To)
+	chat.Message = msg
+	chat.FormId, err = strconv.Atoi(from)
+	chat.ToId, err = strconv.Atoi(to)
 	chat.CreateTime = int(time.Now().Unix())
 	if err != nil {
 		log.Println(err.Error())
