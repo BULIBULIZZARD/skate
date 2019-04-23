@@ -5,12 +5,14 @@ import (
 	"file/skate/server/Organize"
 	"file/skate/server/Player"
 	"file/skate/server/index"
+	"file/skate/websocket"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
 	e := echo.New()
+
 	//index route
 	e.GET(config.GetConfig().GetVersion()+"/index/getContest", index.NewIndexServer().GetIndexContest)
 	e.GET(config.GetConfig().GetVersion()+"/index/getContestMatch/:cid", index.NewIndexServer().GetContestMatch)
@@ -20,6 +22,7 @@ func main() {
 	e.GET(config.GetConfig().GetVersion()+"/player/getShowData", player.NewPlayerServer().GetScoreByName)
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerScore", player.NewPlayerServer().GetPlayerScore)
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerBestScore", player.NewPlayerServer().GetPlayerBestScore)
+	e.GET(config.GetConfig().GetVersion()+"/player/chat", websocket.GetClientManager().WebsocketServer)
 	e.POST(config.GetConfig().GetVersion()+"/player/login",player.NewPlayerServer().PlayerLogin)
 	e.POST(config.GetConfig().GetVersion()+"/player/changePassword",player.NewPlayerServer().ChangePassword)
 
@@ -36,6 +39,8 @@ func main() {
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 	//
 	//Error handler
 	//e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {

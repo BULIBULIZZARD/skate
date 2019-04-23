@@ -42,10 +42,13 @@ func (o *Organize) GetAllPlayerScore(c echo.Context) error {
 	if page < 1 {
 		page = 1
 	}
-
+	pageNum := data.NewOrganizeModel().GetAllPlayerScorePageNum(o.searchCond(c))
+	if pageNum < page {
+		page = pageNum
+	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data":     data.NewOrganizeModel().GetAllPlayerScore(o.searchCond(c), page-1),
-		"page_num": data.NewOrganizeModel().GetAllPlayerScorePageNum(o.searchCond(c)),
+		"page_num": pageNum,
 	})
 }
 

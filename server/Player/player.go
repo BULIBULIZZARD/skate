@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/labstack/echo"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -27,12 +28,20 @@ func (p *Player) GetPlayerScore(c echo.Context) error {
 			"message": "fail",
 		})
 	}
-	pid := p.id
-	score := data.NewScoreModel().GetScoreByPlayerId(pid)
+	page, _ := strconv.Atoi(c.FormValue("page"))
+	if page < 1 {
+		page = 1
+	}
+	pageNum := data.NewScoreModel().GetScoreCountByPlayerId(p.id)
+	if pageNum < page {
+		page = pageNum
+	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"data": score,
+		"data":     data.NewScoreModel().GetScoreByPlayerId(p.id, page),
+		"page_num": pageNum,
 	})
 }
+
 func (p *Player) GetPlayerBestScore(c echo.Context) error {
 	if !p.checkToken(c) {
 		return c.JSON(http.StatusOK, map[string]interface{}{
@@ -66,7 +75,7 @@ func (p *Player) GetScoreByName(c echo.Context) error {
 	model := data.NewPlayerModel()
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"4圈": p.buildEcharsData( model.GetAllScoreByMatchAndPlayer(pid, "4圈")),
+		"4圈":    p.buildEcharsData(model.GetAllScoreByMatchAndPlayer(pid, "4圈")),
 		"7圈":    p.buildEcharsData(model.GetAllScoreByMatchAndPlayer(pid, "7圈")),
 		"500米":  p.buildEcharsData(model.GetAllScoreByMatchAndPlayer(pid, "500米")),
 		"1000米": p.buildEcharsData(model.GetAllScoreByMatchAndPlayer(pid, "1000米")),
@@ -106,7 +115,7 @@ func (p *Player) PlayerLogin(c echo.Context) error {
 	}
 }
 
-func (p *Player) ChangePassword(c echo.Context) error{
+func (p *Player) ChangePassword(c echo.Context) error {
 	if !p.checkToken(c) {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "fail",
@@ -114,14 +123,14 @@ func (p *Player) ChangePassword(c echo.Context) error{
 	}
 	ordPass := c.FormValue("ord")
 	newPass := c.FormValue("new")
-	if newPass != c.FormValue("re"){
+	if newPass != c.FormValue("re") {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "两次密码不一致",
 		})
 	}
 	if ordPass != newPass {
-		flag := data.NewPlayerModel().PlayerChangePassword(p.id,ordPass,newPass)
-		if !flag{
+		flag := data.NewPlayerModel().PlayerChangePassword(p.id, ordPass, newPass)
+		if !flag {
 			return c.JSON(http.StatusOK, map[string]interface{}{
 				"message": "密码错误",
 			})
@@ -166,7 +175,7 @@ func (p *Player) buildEcharsData(data []*models.MatchScore) interface{} {
 	for _, m := range data {
 		count++
 		value = append(value, "0000-00-00 00:"+m.TimeScore)
-		group = append(group, strings.Replace(strings.Replace(m.SGroup,"第","",1),"组","",1))
+		group = append(group, strings.Replace(strings.Replace(m.SGroup, "第", "", 1), "组", "", 1))
 		matchId = append(matchId, m.MatchId)
 		date = append(date, m.Date)
 		matchType = append(matchType, m.MatchType)
