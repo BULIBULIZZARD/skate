@@ -4,7 +4,10 @@ import (
 	"file/skate/models"
 	"file/skate/sql"
 	"file/skate/tools"
+	"file/skate/websocket"
 	"log"
+	"strconv"
+	"time"
 )
 
 type PlayerModel struct {
@@ -70,7 +73,6 @@ func (p *PlayerModel) TreeData(id string) []*models.MatchScore {
 	return data
 }
 
-
 func (p *PlayerModel) PlayerLoginCheck(username string, password string) (*models.SPlayer, bool) {
 	engine := sql.GetSqlEngine()
 	player := models.NewPlayer()
@@ -87,4 +89,19 @@ func (p *PlayerModel) PlayerChangePassword(id string, ordPass string, newPass st
 	player.Password = tools.NewTools().Sha1(newPass)
 	flag, _ := engine.Id(id).Where("password=?", tools.NewTools().Sha1(ordPass)).Update(player)
 	return flag == 1
+}
+
+func (p *PlayerModel) SavePlayerChatLog(message websocket.Message) int  {
+	engine := sql.GetSqlEngine()
+	chat := models.NewChat()
+	var err error
+	chat.Message = message.Msg
+	chat.FormId, err = strconv.Atoi(message.From)
+	chat.ToId, err = strconv.Atoi(message.To)
+	chat.CreateTime = int(time.Now().Unix())
+	if err != nil {
+		log.Println(err.Error())
+	}
+	flag, err := engine.InsertOne(chat)
+	return int(flag)
 }

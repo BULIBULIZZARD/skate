@@ -83,6 +83,17 @@ func (p *Player) GetScoreByName(c echo.Context) error {
 	})
 }
 
+func (p *Player) CheckChatStatus(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "OK",
+	})
+}
+
 func (p *Player) PlayerLogin(c echo.Context) error {
 	username := c.FormValue("username")
 	psw := c.FormValue("password")

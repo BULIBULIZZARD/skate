@@ -2,6 +2,7 @@ package websocket
 
 import (
 	"encoding/json"
+	"file/skate/data"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
@@ -57,6 +58,9 @@ func (client *Client) readMessage() {
 			client.pid = message.From
 			continue
 		}
+		if message.From != "" {
+			data.NewPlayerModel().SavePlayerChatLog(message)
+		}
 		client.manager.message <- message
 	}
 }
@@ -104,6 +108,7 @@ func (manager *ClientManager) Push() {
 		for _, v := range manager.clients {
 			if v.pid == message.To {
 				v.send <- message.Msg
+				continue
 			}
 		}
 	}
