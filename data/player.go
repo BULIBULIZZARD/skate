@@ -5,8 +5,6 @@ import (
 	"file/skate/sql"
 	"file/skate/tools"
 	"log"
-	"strconv"
-	"time"
 )
 
 type PlayerModel struct {
@@ -90,18 +88,3 @@ func (p *PlayerModel) PlayerChangePassword(id string, ordPass string, newPass st
 	return flag == 1
 }
 
-func (p *PlayerModel) SavePlayerChatLog(msg string, from string, to string,status int) int {
-	engine := sql.GetSqlEngine()
-	chat := models.NewChat()
-	var err error
-	chat.Message = msg
-	chat.FormId, err = strconv.Atoi(from)
-	chat.ToId, err = strconv.Atoi(to)
-	chat.CreateTime = int(time.Now().Unix())
-	chat.ReadStatus = status
-	if err != nil {
-		log.Println(err.Error())
-	}
-	flag, err := engine.InsertOne(chat)
-	return int(flag)
-}

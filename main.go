@@ -22,9 +22,11 @@ func main() {
 	e.GET(config.GetConfig().GetVersion()+"/player/getShowData", player.NewPlayerServer().GetScoreByName)
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerScore", player.NewPlayerServer().GetPlayerScore)
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerBestScore", player.NewPlayerServer().GetPlayerBestScore)
+	e.GET(config.GetConfig().GetVersion()+"/player/chatting", player.NewPlayerServer().GetPlayerChatting)
+	e.GET(config.GetConfig().GetVersion()+"/player/chatLog", player.NewPlayerServer().GetPlayerChat)
 	e.GET(config.GetConfig().GetVersion()+"/player/chat", websocket.GetClientManager().WebsocketServer)
-	e.POST(config.GetConfig().GetVersion()+"/player/login",player.NewPlayerServer().PlayerLogin)
-	e.POST(config.GetConfig().GetVersion()+"/player/changePassword",player.NewPlayerServer().ChangePassword)
+	e.POST(config.GetConfig().GetVersion()+"/player/login", player.NewPlayerServer().PlayerLogin)
+	e.POST(config.GetConfig().GetVersion()+"/player/changePassword", player.NewPlayerServer().ChangePassword)
 
 	//organize  route
 	e.GET(config.GetConfig().GetVersion()+"/organize/getPieData", Organize.NewOrganizeServer().GetPieData)

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
 	"net/http"
 )
@@ -105,11 +104,11 @@ func (manager *ClientManager) Push() {
 		for _, v := range manager.clients {
 			if v.pid == message.To {
 				v.send <- message.Msg
-				data.NewPlayerModel().SavePlayerChatLog(message.Msg, message.From, message.To,0)
+				data.NewMessageModel().SavePlayerChatLog(message.Msg, message.From, message.To,0)
 				continue
 			}
 		}
-		data.NewPlayerModel().SavePlayerChatLog(message.Msg, message.From, message.To,1)
+		data.NewMessageModel().SavePlayerChatLog(message.Msg, message.From, message.To,1)
 	}
 }
 
@@ -144,11 +143,3 @@ func (manager *ClientManager) WebsocketServer(c echo.Context) error {
 	return nil
 }
 
-func main() {
-	var clientManager = GetClientManager()
-	e := echo.New()
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
-	e.GET("/ws", clientManager.WebsocketServer)
-	e.Logger.Fatal(e.Start(":1323"))
-}
