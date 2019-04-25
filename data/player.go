@@ -90,7 +90,7 @@ func (p *PlayerModel) PlayerChangePassword(id string, ordPass string, newPass st
 	return flag == 1
 }
 
-func (p *PlayerModel) SavePlayerChatLog(msg string, from string, to string) int {
+func (p *PlayerModel) SavePlayerChatLog(msg string, from string, to string,status int) int {
 	engine := sql.GetSqlEngine()
 	chat := models.NewChat()
 	var err error
@@ -98,6 +98,7 @@ func (p *PlayerModel) SavePlayerChatLog(msg string, from string, to string) int 
 	chat.FormId, err = strconv.Atoi(from)
 	chat.ToId, err = strconv.Atoi(to)
 	chat.CreateTime = int(time.Now().Unix())
+	chat.ReadStatus = status
 	if err != nil {
 		log.Println(err.Error())
 	}

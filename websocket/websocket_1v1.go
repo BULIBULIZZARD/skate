@@ -57,9 +57,7 @@ func (client *Client) readMessage() {
 			client.pid = message.From
 			continue
 		}
-		if message.From != "" {
-			data.NewPlayerModel().SavePlayerChatLog(message.Msg, message.From, message.To)
-		}
+
 		client.manager.message <- message
 	}
 }
@@ -107,9 +105,11 @@ func (manager *ClientManager) Push() {
 		for _, v := range manager.clients {
 			if v.pid == message.To {
 				v.send <- message.Msg
+				data.NewPlayerModel().SavePlayerChatLog(message.Msg, message.From, message.To,0)
 				continue
 			}
 		}
+		data.NewPlayerModel().SavePlayerChatLog(message.Msg, message.From, message.To,1)
 	}
 }
 
