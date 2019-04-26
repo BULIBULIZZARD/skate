@@ -20,7 +20,7 @@ func (m *MessageModel) SavePlayerChatLog(msg string, from string, to string, sta
 	chat := models.NewChat()
 	var err error
 	chat.Message = msg
-	chat.FormId, err = strconv.Atoi(from)
+	chat.FromId, err = strconv.Atoi(from)
 	chat.ToId, err = strconv.Atoi(to)
 	chat.CreateTime = int(time.Now().Unix())
 	chat.ReadStatus = status
@@ -28,7 +28,7 @@ func (m *MessageModel) SavePlayerChatLog(msg string, from string, to string, sta
 		log.Print(err.Error())
 	}
 	flag, err := engine.InsertOne(chat)
-	m.GetIsChatting(chat.FormId, chat.ToId)
+	m.GetIsChatting(chat.FromId, chat.ToId)
 	return int(flag)
 }
 
@@ -99,7 +99,7 @@ func (m *MessageModel) GetAllChatting(id string) []*models.ChattingPlayer {
 func (m *MessageModel) GetAllChatLog(id string) []*models.SChat {
 	engine := sql.GetSqlEngine()
 	chat := models.MoreChat()
-	err := engine.Where("form_id = ? or to_id = ?", id, id).Find(&chat)
+	err := engine.Where("from_id = ? or to_id = ?", id, id).Find(&chat)
 	if err != nil {
 		log.Print(err.Error())
 	}
