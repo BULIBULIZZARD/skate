@@ -103,7 +103,8 @@ func (manager *ClientManager) Push() {
 		message := <-manager.message
 		for _, v := range manager.clients {
 			if v.pid == message.To {
-				v.send <- message.Msg
+				msg ,_:= json.Marshal(message)
+				v.send <- string(msg)
 				data.NewMessageModel().SavePlayerChatLog(message.Msg, message.From, message.To,0)
 				continue
 			}
