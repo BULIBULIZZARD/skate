@@ -79,10 +79,17 @@ func (m *MessageModel) ChangeChattingStatus(id int) {
 	}
 }
 
-func (m *MessageModel) GetAllChatting(id string) []*models.SChatting {
+func (m *MessageModel) GetAllChatting(id string) []*models.ChattingPlayer {
 	engine := sql.GetSqlEngine()
-	chatting := models.MoreChatting()
-	err := engine.Where("user_id = ? ", id).Find(&chatting)
+	chatting := models.MoreChattingPlayer()
+	err := engine.
+		Table("s_chatting").
+		Join("INNER", "s_player", "s_chatting.with_id=s_player.id").
+		Where("s_chatting.user_id = ? and s_chatting.status = ?", id, 1).
+		Cols("s_chatting.with_id","s_chatting.is_new","s_player.player_name","s_player.organize","s_chatting.new_time").
+		Desc("s_chatting.is_new").
+		Desc("s_chatting.new_time").
+		Find(&chatting)
 	if err != nil {
 		log.Print(err.Error())
 	}
