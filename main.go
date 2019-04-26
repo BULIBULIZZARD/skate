@@ -24,6 +24,7 @@ func main() {
 	e.GET(config.GetConfig().GetVersion()+"/player/getPlayerBestScore", player.NewPlayerServer().GetPlayerBestScore)
 	e.GET(config.GetConfig().GetVersion()+"/player/chatting", player.NewPlayerServer().GetPlayerChatting)
 	e.GET(config.GetConfig().GetVersion()+"/player/chatLog", player.NewPlayerServer().GetPlayerChat)
+	e.GET(config.GetConfig().GetVersion()+"/player/status", player.NewPlayerServer().CheckPlayerStatus)
 	e.GET(config.GetConfig().GetVersion()+"/player/chat", websocket.GetClientManager().WebsocketServer)
 	e.POST(config.GetConfig().GetVersion()+"/player/login", player.NewPlayerServer().PlayerLogin)
 	e.POST(config.GetConfig().GetVersion()+"/player/changePassword", player.NewPlayerServer().ChangePassword)
