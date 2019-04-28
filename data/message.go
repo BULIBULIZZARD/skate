@@ -74,6 +74,7 @@ func (m *MessageModel) ChangeChattingStatus(id int) {
 	chatting := models.NewChatting()
 	chatting.IsNew = 1
 	chatting.Status = 1
+	chatting.NewTime = int(time.Now().Unix())
 	_, err := engine.Id(id).Update(chatting)
 	if err != nil {
 		log.Print(err.Error())
@@ -114,6 +115,7 @@ func (m *MessageModel) ChangeChattingIsNew(id string, with string) int {
 	wthId, err := strconv.Atoi(with)
 	userId, err := strconv.Atoi(id)
 	chatting.IsNew = 0
+	chatting.NewTime = int(time.Now().Unix())
 	if err != nil {
 		log.Print(err)
 	}
@@ -121,7 +123,7 @@ func (m *MessageModel) ChangeChattingIsNew(id string, with string) int {
 	if chattingID == 0 {
 		return 0
 	}
-	_, err = engine.Id(chattingID).Cols("is_new").Update(chatting)
+	_, err = engine.Id(chattingID).Cols("is_new,new_time").Update(chatting)
 	if err != nil {
 		log.Print(err)
 		return 0
