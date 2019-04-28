@@ -56,12 +56,12 @@ func (m *MessageModel) InsChatting(from int, to int) {
 	}
 }
 
-func (m *MessageModel) FindChatting(from int, to int) int {
+func (m *MessageModel) FindChatting(with int, to int) int {
 	engine := sql.GetSqlEngine()
 	chatting := models.NewChatting()
-	flag, err := engine.Where("with_id = ? and user_id =?", from, to).Get(chatting)
+	flag, err := engine.Where("with_id = ? and user_id =?", with, to).Get(chatting)
 	if err != nil {
-		log.Print()
+		log.Print(err)
 	}
 	if flag {
 		return chatting.Id
@@ -73,6 +73,7 @@ func (m *MessageModel) ChangeChattingStatus(id int) {
 	engine := sql.GetSqlEngine()
 	chatting := models.NewChatting()
 	chatting.IsNew = 1
+	chatting.Status = 1
 	_, err := engine.Id(id).Update(chatting)
 	if err != nil {
 		log.Print(err.Error())
@@ -86,7 +87,7 @@ func (m *MessageModel) GetAllChatting(id string) []*models.ChattingPlayer {
 		Table("s_chatting").
 		Join("INNER", "s_player", "s_chatting.with_id=s_player.id").
 		Where("s_chatting.user_id = ? and s_chatting.status = ?", id, 1).
-		Cols("s_chatting.with_id","s_chatting.is_new","s_player.player_name","s_player.organize","s_chatting.new_time").
+		Cols("s_chatting.with_id", "s_chatting.is_new", "s_player.player_name", "s_player.organize", "s_chatting.new_time").
 		Desc("s_chatting.is_new").
 		Desc("s_chatting.new_time").
 		Find(&chatting)
@@ -104,4 +105,59 @@ func (m *MessageModel) GetAllChatLog(id string) []*models.SChat {
 		log.Print(err.Error())
 	}
 	return chat
+}
+
+func (m *MessageModel) ChangeChattingIsNew(id string, with string) int {
+	engine := sql.GetSqlEngine()
+	chatting := models.NewChatting()
+	var err error
+	wthId, err := strconv.Atoi(with)
+	userId, err := strconv.Atoi(id)
+	chatting.IsNew = 0
+	if err != nil {
+		log.Print(err)
+	}
+	chattingID := m.FindChatting(wthId, userId)
+	if chattingID == 0 {
+		return 0
+	}
+	_, err = engine.Id(chattingID).Cols("is_new").Update(chatting)
+	if err != nil {
+		log.Print(err)
+		return 0
+	}
+	return chattingID
+}
+
+func (m *MessageModel) CloseChatting(id string, with string) int {
+	engine := sql.GetSqlEngine()
+	chatting := models.NewChatting()
+	var err error
+	wthId, err := strconv.Atoi(with)
+	userId, err := strconv.Atoi(id)
+	chatting.Status = 0
+	if err != nil {
+		log.Print(err)
+	}
+	chattingID := m.FindChatting(wthId, userId)
+	if chattingID == 0 {
+		return 0
+	}
+	_, err = engine.Id(chattingID).Cols("status").Update(chatting)
+	if err != nil {
+		log.Print(err)
+		return 0
+	}
+	return chattingID
+}
+
+func (m *MessageModel) ReadChatMessage(id string, with string) int {
+	engine := sql.GetSqlEngine()
+	chat := models.NewChat()
+	chat.ReadStatus = 0
+	flag, err := engine.Where("from_id = ? or to_id = ?", with, id).Cols("read_status").Update(chat)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	return int(flag)
 }

@@ -88,3 +88,12 @@ func (p *PlayerModel) PlayerChangePassword(id string, ordPass string, newPass st
 	return flag == 1
 }
 
+func (p *PlayerModel) GetPlayerNameAndOrganizeById(id string) *models.SPlayer {
+	engine := sql.GetSqlEngine()
+	player := models.NewPlayer()
+	_, err := engine.Where("id = ?", id).Cols("player_name,organize").Get(player)
+	if err != nil {
+		log.Print(err.Error())
+	}
+	return player
+}

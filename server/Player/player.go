@@ -93,6 +93,7 @@ func (p *Player) CheckPlayerStatus(c echo.Context) error {
 		"message": "OK",
 	})
 }
+
 func (p *Player) GetPlayerChatting(c echo.Context) error {
 	if !p.checkToken(c) {
 		return c.JSON(http.StatusOK, map[string]interface{}{
@@ -103,6 +104,7 @@ func (p *Player) GetPlayerChatting(c echo.Context) error {
 		"data": data.NewMessageModel().GetAllChatting(p.id),
 	})
 }
+
 func (p *Player) GetPlayerChat(c echo.Context) error {
 	if !p.checkToken(c) {
 		return c.JSON(http.StatusOK, map[string]interface{}{
@@ -113,6 +115,58 @@ func (p *Player) GetPlayerChat(c echo.Context) error {
 		"data": data.NewMessageModel().GetAllChatLog(p.id),
 	})
 }
+
+func (p *Player) GetPlayerNameAndOrganizeById(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	playerId := c.FormValue("with_id")
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data.NewPlayerModel().GetPlayerNameAndOrganizeById(playerId),
+	})
+}
+
+func (p *Player) ChangeChattingIsNew(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	playerId := c.FormValue("with_id")
+	data.NewMessageModel().ChangeChattingIsNew(p.id, playerId)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "OK",
+	})
+}
+
+func (p *Player) CloseChatting(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	playerId := c.FormValue("with_id")
+	data.NewMessageModel().CloseChatting(p.id, playerId)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "OK",
+	})
+}
+
+func (p *Player) ReadChatMessage(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	playerId := c.FormValue("with_id")
+	data.NewMessageModel().ReadChatMessage(p.id, playerId)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "OK",
+	})
+}
+
 func (p *Player) PlayerLogin(c echo.Context) error {
 	username := c.FormValue("username")
 	psw := c.FormValue("password")
