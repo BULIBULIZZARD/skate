@@ -48,6 +48,7 @@ func (o *Organize) GetAllPlayerScore(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data":     data.NewOrganizeModel().GetAllPlayerScore(o.searchCond(c), page-1),
+		"page":     page,
 		"page_num": pageNum,
 	})
 }

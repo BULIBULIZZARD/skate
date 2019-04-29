@@ -38,6 +38,7 @@ func (p *Player) GetPlayerScore(c echo.Context) error {
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data":     data.NewScoreModel().GetScoreByPlayerId(p.id, page),
+		"page":     page,
 		"page_num": pageNum,
 	})
 }
@@ -224,13 +225,11 @@ func (p *Player) PlayerNopeFun(c echo.Context) error {
 	}
 
 	playerId := c.FormValue("player_id")
-	data.NewFollowModel().NopeFan(playerId,p.id)
+	data.NewFollowModel().NopeFan(playerId, p.id)
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "OK",
 	})
 }
-
-
 
 func (p *Player) PlayerLogin(c echo.Context) error {
 	username := c.FormValue("username")
