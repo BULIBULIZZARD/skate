@@ -36,7 +36,7 @@ func (o *OrganizeModel) CheckOrganizeLogin(username string, password string) (*m
 	return organize, flag
 }
 
-func (o *OrganizeModel) GetAllPlayerScore(cond string ,page int) []*models.OrganizePlayerScore {
+func (o *OrganizeModel) GetAllPlayerScore(cond string, page int) []*models.OrganizePlayerScore {
 	engine := sql.GetSqlEngine()
 	data := models.MoreOrganizePlayerScore()
 	err := engine.Table("s_player").
@@ -69,9 +69,9 @@ func (o *OrganizeModel) GetAllPlayerScorePageNum(cond string) int {
 		log.Print(err.Error())
 	}
 	if int(pageNum)%config.GetConfig().GetPageSize() > 0 {
-		return int(pageNum) / config.GetConfig().GetPageSize()
+		return int(pageNum)/config.GetConfig().GetPageSize() + 1
 	}
-	return int(pageNum)/config.GetConfig().GetPageSize() + 1
+	return int(pageNum) / config.GetConfig().GetPageSize()
 }
 
 func (o *OrganizeModel) GetBestMatchScore(oid string, matchName string) *models.OrganizePlayerScore {
