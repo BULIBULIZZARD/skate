@@ -167,6 +167,71 @@ func (p *Player) ReadChatMessage(c echo.Context) error {
 	})
 }
 
+func (p *Player) ChattingStatus(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+
+	playerId := c.FormValue("with_id")
+	id, _ := strconv.Atoi(p.id)
+	with, _ := strconv.Atoi(playerId)
+	data.NewMessageModel().GetIsChatting(with, id)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "OK",
+	})
+}
+
+func (p *Player) PlayerFollow(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	playerId := c.FormValue("player_id")
+	data.NewFollowModel().InsOrUpdate(playerId, p.id)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "OK",
+	})
+}
+func (p *Player) PlayerFanList(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data.NewFollowModel().PlayerFunList(p.id),
+	})
+}
+
+func (p *Player) PlayerFollowList(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"data": data.NewFollowModel().PlayerFollowList(p.id),
+	})
+}
+func (p *Player) PlayerNopeFun(c echo.Context) error {
+	if !p.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+
+	playerId := c.FormValue("player_id")
+	data.NewFollowModel().NopeFan(playerId,p.id)
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "OK",
+	})
+}
+
+
+
 func (p *Player) PlayerLogin(c echo.Context) error {
 	username := c.FormValue("username")
 	psw := c.FormValue("password")

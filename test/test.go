@@ -1,6 +1,8 @@
 package main
 
-import "file/skate/data"
+import (
+	"file/skate/data"
+)
 
 type StuRead struct {
 	Name  interface{} `json:"name"`
@@ -21,6 +23,6 @@ type Class struct {
 }
 
 func main() {
-	p:=data.NewPlayerModel().GetPlayerNameAndOrganizeById("2")
-	println(p.PlayerName,p.Organize)
+	result  :=data.NewFollowModel().PlayerFollowList("1")
+	println(result)
 }
