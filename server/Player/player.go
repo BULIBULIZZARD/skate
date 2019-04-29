@@ -37,7 +37,7 @@ func (p *Player) GetPlayerScore(c echo.Context) error {
 		page = pageNum
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"data":     data.NewScoreModel().GetScoreByPlayerId(p.id, page),
+		"data":     data.NewScoreModel().GetScoreByPlayerId(p.id, page-1),
 		"page":     page,
 		"page_num": pageNum,
 	})

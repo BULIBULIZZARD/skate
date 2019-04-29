@@ -55,7 +55,7 @@ func (m *ScoreModel) GetScoreCountByPlayerId(id string) int {
 		log.Print(err.Error())
 	}
 	if int(count)%config.GetConfig().GetPageSize() > 0 {
-		return int(count)/config.GetConfig().GetPageSize() + 1
+		return (int(count) / config.GetConfig().GetPageSize()) + 1
 	}
 	return int(count) / config.GetConfig().GetPageSize()
 }
