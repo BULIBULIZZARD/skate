@@ -101,15 +101,19 @@ func (manager *ClientManager) getClient(conn *websocket.Conn) {
 func (manager *ClientManager) Push() {
 	for {
 		message := <-manager.message
+		flag := true
 		for _, v := range manager.clients {
 			if v.pid == message.To {
 				msg ,_:= json.Marshal(message)
 				v.send <- string(msg)
 				data.NewMessageModel().SavePlayerChatLog(message.Msg, message.From, message.To,0)
-				continue
+				flag = false
+				break
 			}
 		}
-		data.NewMessageModel().SavePlayerChatLog(message.Msg, message.From, message.To,1)
+		if flag{
+			data.NewMessageModel().SavePlayerChatLog(message.Msg, message.From, message.To,1)
+		}
 	}
 }
 
