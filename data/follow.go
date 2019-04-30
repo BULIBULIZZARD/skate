@@ -19,8 +19,9 @@ func (f *FollowModel) InsOrUpdate(uid string, fan string) {
 	id := f.FindFan(uid, fan)
 	if id != 0 {
 		f.UpdateFan(id)
+	}else {
+		f.IncFan(uid, fan)
 	}
-	f.IncFan(uid, fan)
 }
 
 func (f *FollowModel) FindFan(uid string, fan string) int {
