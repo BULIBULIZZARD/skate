@@ -21,15 +21,15 @@ func (x *Index) GetIndexContest(c echo.Context) error {
 	})
 }
 func (x *Index) GetContestMatch(c echo.Context) error {
-	cid := c.Param("cid")
+	cid := c.FormValue("cid")
 	model := data.NewMatchModel()
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data": model.GetMatchByContestId(cid),
 	})
 }
 func (x *Index) GetMatchScore(c echo.Context) error {
-	mid := c.Param("mid")
-	group := c.Param("group")
+	mid := c.FormValue("id")
+	group := c.FormValue("group")
 	model := data.NewScoreModel()
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"data": model.GetScoreByMatchAndGroup(mid, group),

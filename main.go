@@ -15,8 +15,8 @@ func main() {
 
 	//index route
 	e.GET(config.GetConfig().GetVersion()+"/index/getContest", index.NewIndexServer().GetIndexContest)
-	e.GET(config.GetConfig().GetVersion()+"/index/getContestMatch/:cid", index.NewIndexServer().GetContestMatch)
-	e.GET(config.GetConfig().GetVersion()+"/index/getMatchScore/:mid/:group", index.NewIndexServer().GetMatchScore)
+	e.GET(config.GetConfig().GetVersion()+"/index/getContestMatch", index.NewIndexServer().GetContestMatch)
+	e.GET(config.GetConfig().GetVersion()+"/index/getMatchScore", index.NewIndexServer().GetMatchScore)
 
 	//player route
 	e.POST(config.GetConfig().GetVersion()+"/player/login", player.NewPlayerServer().PlayerLogin)
