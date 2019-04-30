@@ -217,7 +217,7 @@ func (p *Player) PlayerFollowList(c echo.Context) error {
 		"data": data.NewFollowModel().PlayerFollowList(p.id),
 	})
 }
-func (p *Player) PlayerNopeFun(c echo.Context) error {
+func (p *Player) PlayerNopeFan(c echo.Context) error {
 	if !p.checkToken(c) {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "fail",

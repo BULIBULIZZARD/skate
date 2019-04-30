@@ -92,7 +92,7 @@ func (f *FollowModel) PlayerFollowList(id string) []*models.PlayerFans {
 		Table("s_follow").
 		Join("INNER", "s_player", "s_follow.user_id = s_player.id").
 		Where("s_follow.fan_id = ? and s_follow.status = ?", id, 1).
-		Cols("s_follow.fan_id,s_follow.create_time,s_player.player_name,s_player.organize").
+		Cols("s_follow.user_id,s_follow.create_time,s_player.player_name,s_player.organize").
 		Desc("s_follow.create_time").
 		Find(&follow)
 	if err != nil {

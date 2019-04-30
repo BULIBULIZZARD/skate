@@ -37,7 +37,7 @@ func main() {
 	e.GET(config.GetConfig().GetVersion()+"/player/getChatName", player.NewPlayerServer().GetPlayerNameAndOrganizeById)
 
 	//player follow
-	e.GET(config.GetConfig().GetVersion()+"/player/nope", player.NewPlayerServer().PlayerNopeFun)
+	e.GET(config.GetConfig().GetVersion()+"/player/nope", player.NewPlayerServer().PlayerNopeFan)
 	e.GET(config.GetConfig().GetVersion()+"/player/follow", player.NewPlayerServer().PlayerFollow)
 	e.GET(config.GetConfig().GetVersion()+"/player/fanList", player.NewPlayerServer().PlayerFanList)
 	e.GET(config.GetConfig().GetVersion()+"/player/followList", player.NewPlayerServer().PlayerFollowList)
