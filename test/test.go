@@ -2,6 +2,7 @@ package main
 
 import (
 	"file/skate/data"
+	"github.com/labstack/gommon/log"
 )
 
 type StuRead struct {
@@ -23,6 +24,6 @@ type Class struct {
 }
 
 func main() {
-	result  :=data.NewFollowModel().PlayerFollowList("1")
-	println(result)
+	result := data.NewContestModel().GetArticleContentById("2")
+	log.Print(result.Content)
 }

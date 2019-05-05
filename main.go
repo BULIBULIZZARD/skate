@@ -13,10 +13,12 @@ import (
 func main() {
 	e := echo.New()
 
-	//index route
+	//index and article route
+	e.GET(config.GetConfig().GetVersion()+"/article/content", index.NewIndexServer().GetArticle)
+	e.GET(config.GetConfig().GetVersion()+"/article/list", index.NewIndexServer().GetArticleList)
 	e.GET(config.GetConfig().GetVersion()+"/index/getContest", index.NewIndexServer().GetIndexContest)
-	e.GET(config.GetConfig().GetVersion()+"/index/getContestMatch", index.NewIndexServer().GetContestMatch)
 	e.GET(config.GetConfig().GetVersion()+"/index/getMatchScore", index.NewIndexServer().GetMatchScore)
+	e.GET(config.GetConfig().GetVersion()+"/index/getContestMatch", index.NewIndexServer().GetContestMatch)
 
 	//player route
 	e.POST(config.GetConfig().GetVersion()+"/player/login", player.NewPlayerServer().PlayerLogin)
