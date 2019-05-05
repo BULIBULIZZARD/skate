@@ -35,3 +35,9 @@ func (x *Index) GetMatchScore(c echo.Context) error {
 		"data": model.GetScoreByMatchAndGroup(mid, group),
 	})
 }
+
+func (x *Index) GetIndexBanner (c echo.Context) error {
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"data":"<li><i></i><img src='http://skate.fsh.ink/static/images/1.jpg'></li><li><i></i><img src='http://skate.fsh.ink/static/images/2.jpg'></li><li><i></i><img src='http://skate.fsh.ink/static/images/3.jpg' ></li>",
+	})
+}
