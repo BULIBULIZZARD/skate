@@ -1,9 +1,6 @@
 package main
 
-import (
-	"file/skate/data"
-	"github.com/labstack/gommon/log"
-)
+import "strings"
 
 type StuRead struct {
 	Name  interface{} `json:"name"`
@@ -24,6 +21,6 @@ type Class struct {
 }
 
 func main() {
-	result := data.NewContestModel().GetArticleContentById("2")
-	log.Print(result.Content)
+	lll :=strings.Count("123123123","")
+	println(lll-1)
 }

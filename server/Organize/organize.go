@@ -9,6 +9,7 @@ import (
 	"github.com/labstack/echo"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -203,6 +204,11 @@ func (o *Organize) ChangePassword(c echo.Context) error {
 	}
 	ordPass := c.FormValue("ord")
 	newPass := c.FormValue("new")
+	if strings.Count(newPass, "")-1 < 6 {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "密码过短",
+		})
+	}
 	if newPass != c.FormValue("re") {
 		return c.JSON(http.StatusOK, map[string]interface{}{
 			"message": "两次密码不一致",
