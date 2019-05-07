@@ -84,7 +84,7 @@ func (p *PlayerModel) PlayerChangePassword(id string, ordPass string, newPass st
 	engine := sql.GetSqlEngine()
 	player := models.NewPlayer()
 	player.Password = tools.NewTools().Sha1(newPass)
-	flag, _ := engine.Id(id).Where("password=?", tools.NewTools().Sha1(ordPass)).Update(player)
+	flag, _ := engine.Where("id = ? and password = ?", id, tools.NewTools().Sha1(ordPass)).Cols("password").Update(player)
 	return flag == 1
 }
 

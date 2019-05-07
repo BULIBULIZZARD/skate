@@ -194,3 +194,27 @@ func (o *Organize) buildTreeData() map[string]interface{} {
 		"children": tree,
 	}
 }
+
+func (o *Organize) ChangePassword(c echo.Context) error {
+	if !o.checkToken(c) {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "fail",
+		})
+	}
+	ordPass := c.FormValue("ord")
+	newPass := c.FormValue("new")
+	if newPass != c.FormValue("re") {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "两次密码不一致",
+		})
+	}
+	flag := data.NewOrganizeModel().OrganizeChangePassword(o.id, ordPass, newPass)
+	if !flag {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "密码错误",
+		})
+	}
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"message": "修改成功",
+	})
+}

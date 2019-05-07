@@ -4,6 +4,7 @@ import (
 	"file/skate/config"
 	"file/skate/models"
 	"file/skate/sql"
+	"file/skate/tools"
 	"log"
 )
 
@@ -117,4 +118,12 @@ func (o *OrganizeModel) GetMatchCountById(oid string, matchName string) int {
 		log.Print(err.Error())
 	}
 	return int(count)
+}
+
+func (o *OrganizeModel) OrganizeChangePassword(id string, ordPass string, newPass string) bool {
+	engine := sql.GetSqlEngine()
+	org := models.NewOrganize()
+	org.Password = tools.NewTools().Sha1(newPass)
+	flag, _ := engine.Where("id = ? and password=?", id, tools.NewTools().Sha1(ordPass)).Cols("password").Update(org)
+	return flag == 1
 }

@@ -276,13 +276,11 @@ func (p *Player) ChangePassword(c echo.Context) error {
 			"message": "两次密码不一致",
 		})
 	}
-	if ordPass != newPass {
-		flag := data.NewPlayerModel().PlayerChangePassword(p.id, ordPass, newPass)
-		if !flag {
-			return c.JSON(http.StatusOK, map[string]interface{}{
-				"message": "密码错误",
-			})
-		}
+	flag := data.NewPlayerModel().PlayerChangePassword(p.id, ordPass, newPass)
+	if !flag {
+		return c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "密码错误",
+		})
 	}
 	return c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "修改成功",
