@@ -50,6 +50,7 @@ func main() {
 	e.GET(config.GetConfig().GetVersion()+"/organize/getTreeData", Organize.NewOrganizeServer().GetTreeData)
 	e.GET(config.GetConfig().GetVersion()+"/organize/getAllPlayer", Organize.NewOrganizeServer().GetAllPlayer)
 	e.GET(config.GetConfig().GetVersion()+"/organize/getAllScore", Organize.NewOrganizeServer().GetAllPlayerScore)
+	e.POST(config.GetConfig().GetVersion()+"/organize/changePassword", Organize.NewOrganizeServer().ChangePassword)
 	e.GET(config.GetConfig().GetVersion()+"/organize/getBestScore", Organize.NewOrganizeServer().GetOrganizeBestScore)
 
 	//CORS middleware
