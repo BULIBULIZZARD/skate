@@ -20,7 +20,7 @@ func (o *OrganizeModel) GetAllPlayerById(oid string) []*models.SPlayer {
 	data := models.MorePlayer()
 	err := engine.Table("s_player").
 		Where("organize_id=?", oid).
-		Cols("id", "player_name", "player_gender", ).
+		Cols("id", "player_name", "player_gender","username" ).
 		Find(&data)
 	if err != nil {
 		log.Print(err.Error())
